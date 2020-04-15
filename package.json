@@ -29,6 +29,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "kill-port": "^1.6.0",
+    "nodemon": "^2.0.3",
     "serve-static": "^1.14.1",
     "showdown": "^1.9.1",
     "tcp-port-used": "^1.0.1"

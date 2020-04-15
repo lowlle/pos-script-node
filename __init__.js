@@ -12,9 +12,9 @@ const config = {
 }
 
 module.exports = (async function init() {
-    // const processUtils = new ProcessUtils(config)
-    // await processUtils.killProcessOnPort()
-    // await processUtils.runGraphyQL()
+    const processUtils = new ProcessUtils(config)
+    await processUtils.killProcessOnPort()
+    await processUtils.runGraphyQL()
 
     const graphQL = new GraphQL()
     await graphQL.loadQueries()

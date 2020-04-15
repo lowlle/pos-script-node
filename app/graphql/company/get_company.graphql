@@ -1,0 +1,43 @@
+query get_company ($size: Int = 100, $page: Int = 1, $id: ID) {
+    items: models(
+        per_page: $size
+        page: $page
+        filter: {
+            deleted_at:{ exists: false }
+            id: { value: $id }
+            name: { value: "modules/insites_core/insites_company" }
+        }
+    ) {
+        total_entries
+        has_next_page
+        has_previous_page
+        per_page
+        current_page
+        total_pages
+        results { 
+            id
+            created_at
+            updated_at
+          	properties 
+          
+          fdca_company: related_models(
+            join_on_property: "id",
+            foreign_property: "company_id",
+            model_schema_name:"fdca_company"
+          ) {
+            id
+            properties
+          }
+          
+          fdca_address: related_models(
+            join_on_property: "id",
+            foreign_property: "source_id",
+            model_schema_name:"modules/insites_core/insites_address"
+          ) {
+            id
+            properties
+          }
+           
+        }
+    }
+}

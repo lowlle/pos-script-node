@@ -1,0 +1,109 @@
+const Request = require("./request")
+const FileUtils = require("./utilities/file")
+
+const path = require("path")
+const dataType = require("./utilities/datatype")
+
+class GraphQL {
+
+    query = {}
+
+    constructor(requests = new Request(), files = new FileUtils()) {
+        this.request = requests
+
+        this.loadQueries(files)
+        this.loadOperations()
+    }
+
+
+    async loadQueries(files) {
+        const query_path = path.join(__dirname, '..', 'app', 'graphql')
+        this.query = await files.convertDirectoryToTree(query_path)
+    }
+
+    async execute(variables, graphQLStatement) {
+        const body = {
+            query: graphQLStatement,
+            variables
+        }
+
+        const payload = JSON.stringify(body)
+
+        return await this.request.post("graphql/", payload)
+    }
+
+    async create_model(model_schema_name, properties, response) {
+        const query = `mutation {
+            model_create(
+                model: {
+                    model_schema_name: "${model_schema_name}",
+                    properties: ${this.createPropertiesPayload(properties)}
+                }
+            ){${JSON.stringify(response)}
+        }`
+        return await this.execute({}, query)
+    }
+    async get_models(filter = {}, per_page = process.env.PER_PAGE, response = {}, page = 1, sort = {}) {
+        const query = `{
+            models(
+                per_page: ${per_page},
+                page: ${page},
+                filter: ${filter},
+                sort: ${sort}
+            ){${JSON.stringify(response)}
+        }`
+        console.log(query)
+        return await this.execute({}, query)
+    }
+    async update_model(model_schema_name, id, properties, response) {
+        const query = `mutation {
+            model_update(
+                id: "${id}"
+                model: {
+                    model_schema_name: "${model_schema_name}",
+                    properties: ${this.createPropertiesPayload(properties)}
+                }
+            ){${JSON.stringify(response)}
+        }`
+        return await this.execute({}, query)
+    }
+    async delete_model(id, response) {
+        const query = `{ models(id: "${id}"{)${JSON.stringify(response)} }`
+        return await this.execute({}, query)
+    }
+
+    loadOperations() {
+        this.models = {
+            create: this.create_model,
+            get: this.get_models,
+            update: this.update_model,
+            delete: this.delete_model
+        }
+    }
+
+    definePropertyFormat(name, value) {
+        const type = dataType.checkDataType(value)
+        const property = {
+            name
+        }
+
+        if (type == "String") property["value"] = value
+        if (type == "Boolean") property["value_boolean"] = value
+        if (type == "Integer") property["value_int"] = value
+        if (type == "Float") property["value_float"] = value
+        if (type == "Array") property["value_array"] = value
+        if (type == "Object") property["value_json"] = value
+
+        return property
+    }
+
+    createPropertiesPayload(properties) {
+        return Object.keys(properties).reduce(
+            (prev, curr) => [
+                definePropertyFormat(curr, properties[curr]),
+                ...prev
+            ], [])
+    }
+}
+
+module.exports = GraphQL

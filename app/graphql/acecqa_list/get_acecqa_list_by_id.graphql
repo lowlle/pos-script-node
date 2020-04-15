@@ -1,0 +1,24 @@
+query get_acecqa_list_by_id ($size: Int = 100, $page: Int = 1, $id: ID) {
+    items: models(
+        per_page: $size
+        page: $page
+        filter: {
+            deleted_at:{ exists: false }
+            id: { value: $id }
+            name: { value: "modules/ins_database/acecqa_list" }
+        }
+    ) {
+        total_entries
+        has_next_page
+        has_previous_page
+        per_page
+        current_page
+        total_pages
+        results { 
+            id
+            created_at
+            updated_at
+          	properties
+        }
+    }
+}

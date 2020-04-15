@@ -1,0 +1,28 @@
+query get_policies_by_email ($size: Int = 100, $page: Int = 1, $email: String) {
+  items: models(
+    per_page: $size
+    page: $page
+    filter: {
+			deleted_at:{ exists: false }
+			name: { value: "policies" }
+			properties: [ 
+        {name: "email", value: $email}
+      ]
+    }
+  ) {
+    total_entries
+    has_next_page
+    has_previous_page
+    per_page
+    current_page
+    total_pages
+    results { 
+      id
+      user_id
+      created_at
+      updated_at
+      # properties 
+      member_no: property(name: "member_no")
+    }
+  }
+}

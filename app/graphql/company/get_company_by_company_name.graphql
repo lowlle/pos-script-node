@@ -1,0 +1,35 @@
+query get_company_by_company_name ($size: Int = 100, $page: Int = 1, $id: ID, $company_name: String) {
+    items: models(
+        per_page: $size
+        page: $page
+        filter: {
+            deleted_at:{ exists: false }
+            id: { value: $id }
+            name: { value: "modules/insites_core/insites_company" }
+            properties: [ 
+                {name: "company_name", value: $company_name} 
+            ]
+        }
+    ) {
+        total_entries
+        has_next_page
+        has_previous_page
+        per_page
+        current_page
+        total_pages
+        results { 
+            id
+            created_at
+            updated_at
+            properties 
+            location_1: address(name: "location_1") {
+                address
+                address2
+                city
+                state
+                country
+                postcode
+            }
+        }
+    }
+}

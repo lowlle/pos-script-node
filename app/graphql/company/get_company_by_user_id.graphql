@@ -1,0 +1,45 @@
+query get_memberships ($size: Int = 10, $page:Int = 1, $id: ID!) {
+  items: users (
+    
+    per_page: $size
+    page: $page
+    filter:{
+      id: {value : $id}
+      deleted_at: { exists: false }
+      profiles: { 
+        name: "modules/insites_core/insites_customer",
+      }
+    }
+    sort: {
+      updated_at: { order: DESC }
+    }
+  ) {
+    total_entries
+    has_next_page
+    has_previous_page
+    per_page
+    current_page
+    total_pages
+    results {
+      id
+      name
+      first_name
+			last_name      
+      email
+      customer : profiles( profile_type: "modules/insites_core/insites_customer" ) {
+        id
+        profile_type
+        company_id: property ( name: "company_id" )
+        company: related_model (
+            join_on_property: "company_id",
+            foreign_property: "id",
+            model_schema_name: "modules/insites_core/insites_company"
+        ) {
+            id
+            properties
+        }
+      }
+     
+    }
+  }
+}

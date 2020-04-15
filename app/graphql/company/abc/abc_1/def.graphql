@@ -1,0 +1,7 @@
+{
+    users(
+        per_page: 2
+    ){
+        total_entries
+    }
+}

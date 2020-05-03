@@ -1,3 +1,22 @@
+/**
+ * This module exports a function with name dataType with the primary purpose 
+ * of exporting methods that checks variable types
+ * 
+ * Please do not add any other function outside the purpose of the class 
+ * unless required by the methods which can not be handled by constructor injection
+ * 
+ * Note that the dataType closure is not exported but has already been initiated
+ * upon exporting the module hence the caller would be able to use the module without
+ * having to declare it as a new instance.
+ * 
+ * Following are the feature of the class:
+ *  - Check the data type of a variable through the checkDataType method
+ *  - Identify if the variable is an instance or type of through a given method
+ * 
+ * 
+ * @version 1.0.0
+ */
+
 function dataType(){
     function isString(value) {
         return typeof value === 'string' || value instanceof String;

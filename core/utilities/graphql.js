@@ -1,8 +1,26 @@
+/**
+ * This module exports a class with name GraphQL with the primary purpose of
+ * executing graphQL queries
+ * 
+ * Please do not add any other function outside the purpose of the class 
+ * unless required by the methods which can not be handled by constructor injection
+ * 
+ * Following are the feature of the class:
+ *  - Serve PlatformOS GraphyQL
+ *  - Send HTTP Request for GET, POST, PUT, DELETE methods
+ * 
+ * Requirements:
+ *  - axios module `npm install axios`
+ *  - node env module `npm install dotenv`
+ * 
+ * @version 1.0.0
+ */
+
 const Request = require("./request")
-const FileUtils = require("./utilities/file")
+const FileUtils = require("./file")
 
 const path = require("path")
-const dataType = require("./utilities/datatype")
+const dataType = require("./datatype")
 
 function definePropertyFormat(name, value) {
     const type = dataType.checkDataType(value)
@@ -34,7 +52,7 @@ function GraphQL(requests = new Request(), files = new FileUtils()) {
     
 
     this.loadQueries = async function () {
-        const query_path = path.join(__dirname, '..', 'app', 'graphql')
+        const query_path = path.join(__dirname, '../../', 'app', 'graphql')
         this.query = await files.convertDirectoryToTree(query_path)
     }
 

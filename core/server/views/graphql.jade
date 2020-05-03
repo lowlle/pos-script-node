@@ -1,0 +1,38 @@
+extends layout
+
+mixin inner_node(collection)
+  ul
+    each node in Object.entries(collection)
+      if typeof node[1] == "object"
+        li(class="folder")
+          span=node[0]
+          +inner_node(node[1])
+          
+      else
+        li
+          span=node[0]
+          pre=node[1]
+
+
+mixin node(collection)
+  ul
+    each node in Object.entries(collection)
+      if typeof node[1] == "object"
+        li(class="folder")
+          span=node[0]
+          - var inner_collection = Object.entries(node[1])
+          if inner_collection.length
+            +inner_node(node[1])
+      else
+        li
+          span=node[0]
+          pre=node[1]
+
+
+                        
+            
+
+
+block content
+  div(class="graphql-tree")
+    +node(graphql)

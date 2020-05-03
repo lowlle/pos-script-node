@@ -1,0 +1,5 @@
+{
+    "sassFilesToCompile": [
+        "app.sass"
+    ]
+}

@@ -20,7 +20,7 @@ const axios = require('axios')
 const dotenv = require('dotenv');
 
 const defaultHeaders = {
-    "X-Requested-With": "XMLHttpRequest",
+    // "X-Requested-With": "XMLHttpRequest",
     Accept: "application/json",
     "Content-Type": "application/json"
 }
@@ -30,7 +30,7 @@ dotenv.config();
 
 class Request {
 
-    constructor(baseURL = `http://localhost:${process.port || 3333}/`, headers = defaultHeaders, httpModule = axios) {
+    constructor(baseURL = `http://localhost:${process.env.PORT || 3333}`, headers = defaultHeaders, httpModule = axios) {
         this.httpService = httpModule.create({
             baseURL,
             headers

@@ -1,0 +1,10 @@
+doctype html
+html
+  head
+    title= title
+    //- link(rel='stylesheet', href='/stylesheets/css/normalize.css')
+    link(rel='stylesheet', href='/styles/css/app.css')
+  body
+    div(class='app')
+      include ./partials/navigation
+      block content

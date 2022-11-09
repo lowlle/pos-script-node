@@ -1,5 +1,5 @@
 /**
- * This module exports the a class name ProcessUtils with the primary purpose of
+ * This module exports a class with name ProcessUtils with the primary purpose of
  * connecting to PlatformOS GraphyQL server
  * 
  * Please do not add any other function outside the purpose of the class 
@@ -7,11 +7,13 @@
  * 
  * Following are the feature of the class:
  *  - Serve PlatformOS GraphyQL
- *  - Send HTTP Request for GET, POST, PUT, DELETE methods
+ *  - Check if there is already a process running on the declared port
+ *  - Kill processes running on the declared port
  * 
  * Requirements:
- *  - axios module `npm install axios`
- *  - node env module `npm install dotenv`
+ *  - node child_process module
+ *  - kill-port module `npm install kill-port`
+ *  - tcp port checker `npm install tcp-port-used`
  * 
  * @version 1.0.0
  */
@@ -51,12 +53,18 @@ class ProcessUtils {
         }
     }
 
+    /**
+     * @todo enhance the logging features to be more debuggable and verbose
+     */
     async runGraphyQL(){
         await this.checkPortStatus()
             ? await this.killProcessOnPort()
             : null
 
         const command = `cd ${this.config.posDirectory} && pos-cli gui serve ${this.config.environment} -p ${this.config.port}`
+
+        console.log("\n\n", {command});
+
         exec(command, (err, stdout, stderr) => {
             if (err) {
                 console.error(err)

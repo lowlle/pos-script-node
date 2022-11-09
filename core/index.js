@@ -1,6 +1,6 @@
-const GraphQL = require("./core/graphQL")
-const ProcessUtils = require("./core/utilities/process")
-const server = require("./core/server")
+const GraphQL = require("./utilities/graphql")
+const ProcessUtils = require("./utilities/process")
+const server = require("./server")
 
 const dotenv = require('dotenv');
 dotenv.config();
